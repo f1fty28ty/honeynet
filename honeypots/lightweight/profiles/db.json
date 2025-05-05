@@ -1,0 +1,19 @@
+{
+    "name": "db",
+    "port": 3306,
+    "banner": "Welcome to MySQL 5.7.42 honeypot",
+    "commands": {
+      "login*":          "200 OK\r\n",
+      "show databases;": "credentials\nusers\nsys\n",
+      "use*":            "Database changed\r\n",
+      "select*":         "id | username | password\n1 | admin | admin123\n",
+      "show tables;":    "users\nconfig\nbackup\n",
+      "describe users;": "Field | Type | Null | Key | Default | Extra\nid | int | NO | PRI | NULL | auto_increment\nusername | varchar(255) | NO | | NULL | \npassword | varchar(255) | NO | | NULL | \n",
+      "insert into*":    "Query OK, 1 row affected\r\n",
+      "update*":         "Query OK, 1 row affected\r\n",
+      "delete from*":    "Query OK, 1 row affected\r\n",
+      "create table*":   "Query OK, 0 rows affected\r\n",
+      "drop table*":     "Query OK, 0 rows affected\r\n",
+      "logout":          "Bye\r\n"
+    }
+  }

@@ -1,0 +1,21 @@
+{
+    "name": "email",
+    "port": 25,
+    "banner": "220 mail.local ESMTP Postfix (Ubuntu)",
+    "commands": {
+      "ehlo*":      "250-mail.local Hello\r\n250 SIZE 35882577\r\n",
+      "auth login": "334 VXNlcm5hbWU6\r\n",
+      "mail from:*":"250 OK\r\n",
+      "rcpt to:*":  "250 Accepted\r\n",
+      "data":       "354 End data with <CR><LF>.<CR><LF>\r\n",
+      ".":          "250 Message accepted for delivery\r\n",
+      "helo*":      "250 mail.local\r\n",
+      "starttls":   "220 Ready to start TLS\r\n",
+      "vrfy*":      "252 Cannot VRFY user\r\n",
+      "expn*":      "252 Cannot EXPN user\r\n",
+      "help":       "214-This is Postfix\r\n214-Commands:\r\n214-HELO EHLO MAIL RCPT DATA RSET NOOP QUIT HELP VRFY\r\n214 End of HELP info\r\n",
+      "rset":       "250 Reset state\r\n",
+      "noop":       "250 OK\r\n",
+      "quit":       "221 Bye\r\n"
+    }
+  }

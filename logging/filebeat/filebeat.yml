@@ -1,0 +1,47 @@
+filebeat.inputs:
+
+# Input 1: JSON log files from honeypots
+- type: log
+  enabled: true
+  paths:
+  - /honeypots/*/logs/*.log
+  json.keys_under_root: true
+  json.add_error_key: true
+  overwrite_keys: true
+  fields_under_root: true
+  fields:
+    honeynet: true
+    source_type: file
+  tags: [ "json_file" ]
+  scan_frequency: 5s
+  close_inactive: 1m
+
+# Input 2: Container logs (stderr/stdout JSON)
+- type: container
+  enabled: true
+  paths:
+  - /var/lib/docker/containers/*/*.log
+  stream: all
+  json.keys_under_root: true
+  json.add_error_key: true
+  overwrite_keys: true
+  fields_under_root: true
+  fields:
+    honeynet: true
+    source_type: container
+  tags: [ "stdout_json" ]
+
+setup.template.name: "honeypot-logs"
+setup.template.pattern: "honeypot-logs-*"
+
+output.elasticsearch:
+  hosts: [ "http://elasticsearch:9200" ]
+  index: "honeypot-logs-%{+yyyy.MM.dd}"
+
+setup.kibana:
+  host: "http://kibana:5601"
+
+processors:
+- add_host_metadata: ~
+- add_cloud_metadata: ~
+- add_docker_metadata: ~

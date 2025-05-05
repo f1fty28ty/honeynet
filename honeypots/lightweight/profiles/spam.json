@@ -1,0 +1,21 @@
+{
+    "name": "spam",
+    "port": 2525,
+    "banner": "220 spam.local ESMTP Exim",
+    "commands": {
+      "helo*":      "250 spam.local greets you\r\n",
+      "mail from:*":"250 OK\r\n",
+      "rcpt to:*":  "250 OK\r\n",
+      "data":       "354 Send it; end with <CR><LF>.<CR><LF>\r\n",
+      ".":          "250 Queued as 12345\r\n",
+      "ehlo*":      "250-spam.local\r\n250-SIZE 35882577\r\n250-8BITMIME\r\n250-PIPELINING\r\n250-AUTH PLAIN LOGIN\r\n250 STARTTLS\r\n",
+      "auth login": "334 VXNlcm5hbWU6\r\n",
+      "starttls":   "220 Ready to start TLS\r\n",
+      "vrfy*":      "252 Cannot VRFY user\r\n",
+      "expn*":      "252 Cannot EXPN user\r\n",
+      "help":       "214-This is Exim\r\n214-Commands:\r\n214-HELO EHLO MAIL RCPT DATA RSET NOOP QUIT HELP VRFY\r\n214 End of HELP info\r\n",
+      "rset":       "250 Reset state\r\n",
+      "noop":       "250 OK\r\n",
+      "quit":       "221 Later\r\n"
+    }
+  }

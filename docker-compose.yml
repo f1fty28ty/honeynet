@@ -1,0 +1,174 @@
+version: '3.8'
+
+services:
+  # --------------- Monitoring --------------
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.18.0
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - xpack.security.transport.ssl.enabled=false
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+    networks:
+      honeynet_net:
+        ipv4_address: 172.25.0.10
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.18.0
+    container_name: kibana
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
+    networks:
+      honeynet_net:
+        ipv4_address: 172.25.0.11
+
+  filebeat:
+    build: ./logging/filebeat
+    container_name: filebeat
+    user: root
+    volumes:
+      - ./honeypots:/honeypots:ro
+      - ./logging/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    depends_on:
+      - elasticsearch
+    networks:
+      honeynet_net:
+        ipv4_address: 172.25.0.60
+
+  # -------- Lightweight honeypots ---------
+  honeypot_low:
+    build: ./honeypots/lightweight
+    image: honeynet-hp_low               # ✅ Add this line
+    container_name: honeypot_low
+    environment:
+      - HONEYPOT_PROFILE=low.json
+    ports: ["21:21"]
+    volumes:
+      - ./honeypots/lightweight/logs:/app/logs
+    networks:
+      honeynet_net:
+        ipv4_address: 172.25.0.100
+
+  honeypot_medium:
+    image: honeynet-hp_low
+    container_name: honeypot_medium
+    environment:
+      - HONEYPOT_PROFILE=medium.json
+    ports: ["2121:2121"]
+    volumes:
+      - ./honeypots/lightweight/logs:/app/logs
+    networks:
+      honeynet_net:
+        ipv4_address: 172.25.0.106
+
+  honeypot_email:
+    image: honeynet-hp_low
+    container_name: honeypot_email
+    environment:
+      - HONEYPOT_PROFILE=email.json
+    ports: ["2525:25"]
+    volumes:
+      - ./honeypots/lightweight/logs:/app/logs
+    networks:
+      honeynet_net:
+        ipv4_address: 172.25.0.104
+
+  honeypot_spam:
+    image: honeynet-hp_low
+    container_name: honeypot_spam
+    environment:
+      - HONEYPOT_PROFILE=spam.json
+    ports: ["25:25"]
+    volumes:
+      - ./honeypots/lightweight/logs:/app/logs
+    networks:
+      honeynet_net:
+        ipv4_address: 172.25.0.101
+
+  honeypot_db:
+    image: honeynet-hp_low
+    container_name: honeypot_db
+    environment:
+      - HONEYPOT_PROFILE=db.json
+    ports: ["33060:3306"]
+    volumes:
+      - ./honeypots/lightweight/logs:/app/logs
+    networks:
+      honeynet_net:
+        ipv4_address: 172.25.0.103
+
+  honeypot_malware:
+    image: honeynet-hp_low
+    container_name: honeypot_malware
+    environment:
+      - HONEYPOT_PROFILE=malware.json
+    ports: ["8083:8083"]
+    volumes:
+      - ./honeypots/lightweight/logs:/app/logs
+    networks:
+      honeynet_net:
+        ipv4_address: 172.25.0.105
+
+  # ----- High-interaction / specialised ----
+  honeypot_production:
+    build: ./honeypots/production
+    container_name: honeypot_production
+    ports: ["8082:8080"]
+    networks:
+      honeynet_net:
+        ipv4_address: 172.25.0.107
+
+  honeypot_pure:
+    build: ./honeypots/pure
+    container_name: honeypot_pure
+    ports: ["2222:2222"]
+    volumes:
+      - ./honeypots/pure/logs:/app/logs
+    networks:
+      honeynet_net:
+        ipv4_address: 172.25.0.108
+
+  honeypot_server:
+    build: ./honeypots/server
+    container_name: honeypot_server
+    ports: ["3306:3306"]
+    networks:
+      honeynet_net:
+        ipv4_address: 172.25.0.109
+
+  honeypot_client:
+    build:
+      context: ./honeypots/client
+      dockerfile: Dockerfile
+    container_name: honeypot_client
+    volumes:
+      - ./honeypots/client/logs:/app/logs
+    networks:
+      honeynet_net:
+        ipv4_address: 172.25.0.102
+
+networks:
+  honeynet_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.25.0.0/24
+          gateway: 172.25.0.1
+
+volumes:
+  esdata:

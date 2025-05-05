@@ -1,0 +1,12 @@
+# Include only default honeypots
+**
+!honeypots/client/**
+!honeypots/lightweight/**
+!test/utils/**
+**/logs/**
+**/.git/**
+
+# Toggle these during development
+!honeypots/production/**
+!honeypots/server/**
+!honeypots/pure/**

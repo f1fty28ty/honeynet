@@ -53,7 +53,7 @@ services:
   # -------- Lightweight honeypots ---------
   honeypot_low:
     build: ./honeypots/lightweight
-    image: honeynet-hp_low               # ✅ Add this line
+    image: honeynet-hp_low               
     container_name: honeypot_low
     environment:
       - HONEYPOT_PROFILE=low.json
